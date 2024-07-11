@@ -7,29 +7,86 @@
                 <th class="text-right">Jumlah</th>
             </tr>
         </thead>
-        <tbody>
-            @php
-                $total = 0;
-            @endphp
+        <tbody> @php
+            $total = 0;
+        @endphp
 
-            @foreach ($revenue as $key => $value)
-                @if (!in_array($key, ['id', 'jt', 'created_at', 'updated_at']))
-                    <tr>
-                        <td class="text-uppercase">{{ ucfirst($key) }}</td>
-                        <td class="text-right">{{ number_format($value) }}</td>
-                    </tr>
-                    @php
-                        // Access the property directly using the arrow operator
-                        $total += $value;
-                    @endphp
-                @endif
+            @foreach ($revenue as $item)
+                <tr>
+                    <td class="text-uppercase">Therapist</td>
+                    <td class="text-right">{{ number_format($item->therapist) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Nona</td>
+                    <td class="text-right">{{ number_format($item->nona) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Kitchen</td>
+                    <td class="text-right">{{ number_format($item->kitchen) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Beverage</td>
+                    <td class="text-right">{{ number_format($item->beverage) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Paket</td>
+                    <td class="text-right">{{ number_format($item->paket) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Minol</td>
+                    <td class="text-right">{{ number_format($item->minol) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Wine</td>
+                    <td class="text-right">{{ number_format($item->wine) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Cigarettes</td>
+                    <td class="text-right">{{ number_format($item->cigarretes) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Cerutu</td>
+                    <td class="text-right">{{ number_format($item->cerutu) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Minibar</td>
+                    <td class="text-right">{{ number_format($item->minibar) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Room</td>
+                    <td class="text-right">{{ number_format($item->room) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-uppercase">Lost and Break</td>
+                    <td class="text-right">{{ number_format($item->lostnbrake) }}</td>
+                </tr>
+
+                @php
+                    // Add the current item values to the total
+                    $total +=
+                        $item->therapist +
+                        $item->nona +
+                        $item->kitchen +
+                        $item->beverage +
+                        $item->paket +
+                        $item->minol +
+                        $item->wine +
+                        $item->cigarretes +
+                        $item->cerutu +
+                        $item->minibar +
+                        $item->room +
+                        $item->lostnbrake;
+                @endphp
             @endforeach
-
-            <tr class="font-weight-bold">
-                <td class="">TOTAL</td>
-                <td class="text-right">{{ number_format($total) }}</td>
-            </tr>
         </tbody>
+        <tfoot>
+
+
+            <tr>
+                <td class="text-uppercase"><strong>Total</strong></td>
+                <td class="text-right"><strong>{{ number_format($total) }}</strong></td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
@@ -103,7 +160,11 @@
         var r = (bigint >> 16) & 255;
         var g = (bigint >> 8) & 255;
         var b = bigint & 255;
-        return { r: r, g: g, b: b };
+        return {
+            r: r,
+            g: g,
+            b: b
+        };
     }
 
     function rgbToHex(r, g, b) {

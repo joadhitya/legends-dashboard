@@ -10,6 +10,64 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card-body-pt-2" id="section-chart-revenue">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <label class="col-form-label">Periode Transaksi</label>
+                                {{-- <select name="start_periode" id="start_periode"
+                                    class="form-control form-control-sm bg-transparent">
+                                    <option value="">--Pilih Periode</option>
+                                    @foreach ($data as $dataPeriodeStart)
+                                        <option value="{{ $dataPeriodeStart->jt }}">
+                                            {{ date_format(date_create($dataPeriodeStart->jt), 'd F Y') }}</option>
+                                    @endforeach
+                                </select> --}}
+                                <input type="date" name="start_periode" id="start_periode" class="form-control form-control-sm bg-transparent">
+                              
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <label class="col-form-label">Akhir Periode Transaksi</label>
+                                <input type="date" name="end_periode" id="end_periode" class="form-control form-control-sm bg-transparent">
+                              
+                                {{-- <select name="end_periode" id="end_periode"
+                                    class="form-control form-control-sm bg-transparent">
+                                    <option value="">--Pilih Periode</option>
+                                    @foreach ($data as $dataPeriodeEnd)
+                                        <option value="{{ $dataPeriodeEnd->jt }}">
+                                            {{ date_format(date_create($dataPeriodeEnd->jt), 'd F Y') }}</option>
+                                    @endforeach
+                                </select> --}}
+                            </div>
+                        </div>
+                        {{-- <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <label class="col-form-label">Item</label>
+                                <select multiple name="item[]" id="item"
+                                    class="form-control form-control-sm bg-transparent">
+                                </select>
+                            </div>
+                        </div> --}}
+                        <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <button type="button" class="btn text-uppercase btn-primary btn-sm text-white btn-block"
+                                    onclick="showDashboard()" style="margin-top:30px"><i
+                                        class="fe fe-search mr-2"></i>Tampilan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="chart-revenue">
+                    <div class="col-md-12 mt-2">
+                        <h5 class="text-center">--Silahkan pilih periode--</h5>
+                    </div>
+                </div>
+            </div>
+
             <div class="card-body pt-2" id="table-revenue">
                 <div class="row">
                     <div class="col-md-12">
@@ -37,44 +95,6 @@
                 </div>
             </div>
 
-            <div class="card-body-pt-2" id="section-chart-revenue">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group mb-0">
-                                <label class="col-form-label">Periode Transaksi</label>
-                                <select name="periode" id="periode" class="form-control form-control-sm bg-transparent">
-                                    <option value="">--Pilih Periode</option>
-                                    @foreach ($data as $dataPeriode)
-                                        <option value="{{ $dataPeriode->id }}">
-                                            {{ date_format(date_create($dataPeriode->jt), 'd F Y') }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-0">
-                                <label class="col-form-label">Item</label>
-                                <select multiple name="item[]" id="item"
-                                    class="form-control form-control-sm bg-transparent">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-0">
-                                <button type="button" class="btn text-uppercase btn-primary btn-sm text-white btn-block"
-                                    onclick="showDashboard()" style="margin-top:30px"><i
-                                        class="fe fe-search mr-2"></i>Tampilan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" id="chart-revenue">
-                    <div class="col-md-12 mt-2">
-                        <h5 class="text-center">--Silahkan pilih periode--</h5>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 @endsection
@@ -104,8 +124,9 @@
 
         function showDashboard() {
             $("#chart-revenue").html(htmlLoading)
-            var id = $("#periode").val();
-            if (id == "") {
+            var start_periode = $("#start_periode").val();
+            var end_periode = $("#end_periode").val();
+            if (start_periode == "" || end_periode == "") {
                 $("#chart-revenue").html(htmlEmpty)
                 return;
             }
@@ -114,10 +135,12 @@
                 type: "post",
                 url: "/admin/revenue",
                 data: {
-                    id
+                    start_periode,
+                    end_periode,
                 },
                 dataType: "json",
                 success: function(response) {
+                    console.log(response)
                     $("#chart-revenue").html(response.view);
                 },
                 error: function(err) {
