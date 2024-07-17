@@ -49,11 +49,33 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         #region Dashboard
         Route::resource('/dashboard', 'Dashboard\DashboardController');
         Route::post('/revenue', function (Request $request) {
-            extract($request->all());
-            $revenue = DB::table('revenues')->find($id);
+            // Get all request parameters
+            $start_periode = $request->input('start_periode');
+            $end_periode = $request->input('end_periode');
+
+            // Build the query using Laravel's query builder
+            $revenue = DB::table('revenues')
+                ->selectRaw('
+        SUM(therapist) AS therapist,
+        SUM(nona) AS nona,
+        SUM(kitchen) AS kitchen,
+        SUM(beverage) AS beverage,
+        SUM(paket) AS paket,
+        SUM(minol) AS minol,
+        SUM(wine) AS wine,
+        SUM(cigarettes) AS cigarretes,
+        SUM(cerutu) AS cerutu,
+        SUM(minibar) AS minibar,
+        SUM(room) AS room,
+        SUM(lostnbrake) AS lostnbrake
+    ')
+                ->where('jt', '>=', $start_periode)
+                ->where('jt', '<=', $end_periode)
+                ->get();
+
             $response = [
                 'data' => $revenue,
-                'view' => view('admin.dashboard.revenue-detail', ['revenue' => $revenue])->render()
+                'view' => view('admin.dashboard.revenue-detail', compact('revenue'))->render()
             ];
 
             return response()->json($response);
