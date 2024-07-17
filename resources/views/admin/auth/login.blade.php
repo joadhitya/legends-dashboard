@@ -64,7 +64,7 @@
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
 
-                <p class="my-3 text-muted">Legends© 2023</p>
+                <p class="my-3 text-muted">Coba Edit Legends© 2023</p>
             </form>
         </div>
     </div>
